@@ -1,5 +1,6 @@
 import abc
 import logging
+import os
 
 
 class LLMResponse:
@@ -33,7 +34,7 @@ class LLMClient(abc.ABC):
     Manages logging, configuration and response management.
     """
 
-    def __init__(self, model: str, api_key: str, log_level: int = logging.INFO):
+    def __init__(self, model: str, api_key: str):
         """
         Initialize the client with base configurations
 
@@ -46,7 +47,7 @@ class LLMClient(abc.ABC):
         self.api_key = api_key
 
         self.logger = logging.getLogger(f"{self.__class__.__name__}")
-        self.logger.setLevel(log_level)
+        self.logger.setLevel(os.getenv("LOG_LEVEL", default=logging.INFO))
 
         handler = logging.StreamHandler()
         formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
