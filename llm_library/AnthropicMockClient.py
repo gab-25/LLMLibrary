@@ -6,7 +6,7 @@ from .LLMClient import LLMClient, LLMRequest, LLMResponse
 class AnthropicMockClient(LLMClient):
     """Mock client for simulating interactions with Anthropic"""
 
-    def __init__(self, model):
+    def __init__(self, model="claude-3-sonnet"):
         api_key = os.getenv("ANTHROPIC_API_KEY")
         super().__init__(model, api_key)
 
