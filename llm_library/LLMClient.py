@@ -19,14 +19,13 @@ class LLMRequest(BaseModel):
     """Standard model for LLM request"""
     prompt: str = Field(min_length=1)
     model: str
-    _messages: List[Dict[str, Any]]
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._messages = [{"role": "user", "content": [{"type": "text", "text": self.prompt}]}]
+    @property
+    def messages(self):
+        return [{"role": "user", "content": [{"type": "text", "text": self.prompt}]}]
 
     def __str__(self):
-        return f"LLMRequest(messages={self._messages}, model_name={self.model})"
+        return f"LLMRequest(messages={self.messages}, model_name={self.model})"
 
 
 class LLMClient(abc.ABC):
