@@ -1,26 +1,28 @@
 import abc
 import logging
 import os
+from typing import Dict, Any, List
+from pydantic import BaseModel, ValidationError, Field
 
 
-class LLMResponse:
+class LLMResponse(BaseModel):
     """Standard model for LLM response"""
-
-    def __init__(self, content: str, tokens_used: str, model: str):
-        self.content = content
-        self.tokens_used = tokens_used
-        self.model = model
+    content: str
+    tokens_used: int
+    model: str
 
     def __str__(self):
         return f"LLMResponse(content={self.content}, tokens_used={self.tokens_used}, model_name={self.model})"
 
 
-class LLMRequest:
+class LLMRequest(BaseModel):
     """Standard model for LLM request"""
+    prompt: str = Field(min_length=1)
+    model: str
 
-    def __init__(self, prompt: str, model: str):
-        self.messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
-        self.model = model
+    @property
+    def messages(self):
+        return [{"role": "user", "content": [{"type": "text", "text": self.prompt}]}]
 
     def __str__(self):
         return f"LLMRequest(messages={self.messages}, model_name={self.model})"
@@ -68,3 +70,22 @@ class LLMClient(abc.ABC):
         Raises:
             RuntimeError: For errors during generation
         """
+
+    def validate_request(self, request: Dict[str, Any]) -> LLMRequest:
+        """
+        Validate the request using Pydantic
+        
+        Args:
+            request: Dizionario di richiesta
+        
+        Returns:
+            LLMRequest instance validated
+        
+        Raises:
+            ValidationError: If the request is not valid
+        """
+        try:
+            return LLMRequest(**request)
+        except ValidationError as e:
+            self.logger.error("Errore di validazione: %s", e)
+            raise RuntimeError() from e

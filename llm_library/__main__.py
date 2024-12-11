@@ -35,8 +35,7 @@ def main(model_type: LLM):
     try:
         response = client.create(prompt)
         print(f"response: {response.content}")
-    except RuntimeError as e:
-        print(f"Error: {e}")
+    except RuntimeError:
         sys.exit(1)
 
 

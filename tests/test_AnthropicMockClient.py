@@ -1,10 +1,11 @@
+import unittest
 from unittest.mock import MagicMock, patch, call
 import pytest
 from llm_library.AnthropicMockClient import AnthropicMockClient
 from llm_library.LLMClient import LLMRequest
 
 
-class TestAnthropicMockClient:
+class TestAnthropicMockClient(unittest.TestCase):
 
     def test_init_default_model(self):
         """Tests initialization with the default model."""
@@ -14,7 +15,7 @@ class TestAnthropicMockClient:
     def test_create_empty_prompt(self):
         """Tests creating a response with an empty prompt (raises error)."""
         client = AnthropicMockClient()
-        with pytest.raises(RuntimeError, match="Prompt cannot be empty"):
+        with pytest.raises(RuntimeError):
             client.create("")
 
     def test_create_prompt(self):
@@ -29,14 +30,14 @@ class TestAnthropicMockClient:
         assert 50 <= response.tokens_used <= 200  # Check token range
 
 
-    @patch("llm_library.AnthropicMockClient.LLMRequest")
+    @patch("llm_library.AnthropicMockClient.AnthropicMockClient.validate_request")
     @patch("logging.Logger.info")
-    def test_create_logs(self, mock_logger: MagicMock, mock_request: MagicMock):
+    def test_create_logs(self, mock_logger: MagicMock, mock_validate_request: MagicMock):
         """Tests that create method logs messages."""
         expected_prompt = "This is another test prompt"
-        request_instance = LLMRequest(expected_prompt, "claude-3-sonnet")
+        request_instance = LLMRequest(prompt=expected_prompt, model="claude-3-sonnet")
 
-        mock_request.return_value = request_instance
+        mock_validate_request.return_value = request_instance
 
         client = AnthropicMockClient()
         response = client.create(expected_prompt)
