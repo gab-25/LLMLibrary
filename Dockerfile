@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.12
 
 RUN pip install poetry
 
@@ -7,4 +7,4 @@ WORKDIR /app
 COPY . .
 RUN poetry install --with test
 
-ENTRYPOINT ["poetry", "run", "pytest", "./tests", "-v"]
+CMD ["poetry", "run", "pytest", "./tests", "-v"]
