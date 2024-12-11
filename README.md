@@ -5,6 +5,7 @@ Libreria Python per l'interazione con Large Language Models (LLMs)
 
 ## Versioni
 - 0.1.0: Implementazione base con classi mock
+- 0.2.0: Aggiunta selezione modello
 
 ## Requisiti
 - Python 3.12+
