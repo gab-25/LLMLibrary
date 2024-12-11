@@ -20,10 +20,7 @@ class AnthropicMockClient(LLMClient):
         Returns:
             Response mock standardized
         """
-        if prompt is None or prompt == "":
-            raise RuntimeError("Prompt cannot be empty")
-
-        request = LLMRequest(prompt=prompt, model=self.model)
+        request = self.validate_request(LLMRequest(prompt=prompt, model=self.model))
         self.logger.info("create request: %s", request)
 
         mock_responses = [
