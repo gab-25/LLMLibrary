@@ -7,5 +7,4 @@ WORKDIR /app
 COPY . .
 RUN poetry install --with test
 
-CMD ["poetry", "run", "pytest", "./tests", "-v"]
-# CMD ["sleep", "infinity"]
+ENTRYPOINT ["poetry", "run", "pytest", "./tests", "-v"]

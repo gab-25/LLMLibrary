@@ -24,7 +24,7 @@ poetry run pytest tests/ -v
 
 ### Testing con Docker
 ```bash
-docker-compose up --build
+docker-compose up
 ```
 
 ## Esecuzione
