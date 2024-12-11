@@ -1,6 +1,6 @@
 import os
 import random
-from .LLMClient import LLMClient, LLMRequest, LLMResponse
+from .LLMClient import LLMClient, LLMResponse
 
 
 class AnthropicMockClient(LLMClient):
@@ -20,7 +20,7 @@ class AnthropicMockClient(LLMClient):
         Returns:
             Response mock standardized
         """
-        request = self.validate_request(LLMRequest(prompt=prompt, model=self.model))
+        request = self.validate_request({"prompt": prompt, "model": self.model})
         self.logger.info("create request: %s", request)
 
         mock_responses = [
