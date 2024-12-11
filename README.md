@@ -11,15 +11,15 @@ Libreria Python per l'interazione con Large Language Models (LLMs)
 
 ## Installazione
 ```bash
-git clone https://github.com/tuonome/llm-library.git
-cd llm-library
-pip install -e .
+git clone https://github.com/gab-25/LLMLibrary.git
+cd LLMLibrary
+poetry install
 ```
 
 ## Testing
 ### Esecuzione test locali
 ```bash
-pytest tests/
+poetry run pytest tests/ -v
 ```
 
 ### Testing con Docker
@@ -27,17 +27,7 @@ pytest tests/
 docker-compose up --build
 ```
 
-## Utilizzo
-```python
-from llm_library.mock_clients import OpenAIMockClient, AnthropicMockClient
-from llm_library.abstract_client import LLMRequest
-
-# Esempio di utilizzo
-client = OpenAIMockClient()
-request = LLMRequest(prompt="Genera un testo", max_tokens=100)
-response = client.generate(request)
-print(response.content)
+## Esecuzione
+```bash
+poetry run python -m llm_library <LLM>
 ```
-
-## Licenza
-MIT License

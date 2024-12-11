@@ -1,0 +1,7 @@
+services:
+  llm_library:
+    build: .
+    container_name: LLMLibrary
+    volumes:
+      - .:/app
+    
