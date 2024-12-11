@@ -20,8 +20,11 @@ class AnthropicMockClient(LLMClient):
         Returns:
             Response mock standardized
         """
+        if prompt is None or prompt == "":
+            raise RuntimeError("Prompt cannot be empty")
+
         request = LLMRequest(prompt=prompt, model=self.model)
-        self.logger.info(f"create request: {request}")
+        self.logger.info("create request: %s", request)
 
         mock_responses = [
             "La risposta simulata per Anthropic è questa.",
@@ -31,5 +34,5 @@ class AnthropicMockClient(LLMClient):
         response = LLMResponse(
             content=random.choice(mock_responses), tokens_used=random.randint(50, 200), model=self.model
         )
-        self.logger.info(f"generate response: {response}")
+        self.logger.info("generate response: %s", response)
         return response

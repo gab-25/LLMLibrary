@@ -3,6 +3,7 @@ import enum
 from dotenv import load_dotenv
 from .OpenAIMockClient import OpenAIMockClient
 from .AnthropicMockClient import AnthropicMockClient
+from .LLMClient import LLMClient
 
 load_dotenv()
 
@@ -12,14 +13,21 @@ class LLM(enum.Enum):
     ANTHROPIC = "anthropic"
 
 
-def main(llm: LLM):
-    if llm == LLM.OPENAI:
+def main(model_type: LLM):
+    client: LLMClient = None
+    if model_type == LLM.OPENAI:
         client = OpenAIMockClient()
-    if llm == LLM.ANTHROPIC:
+    if model_type == LLM.ANTHROPIC:
         client = AnthropicMockClient()
+    if client is None:
+        raise ValueError(f"Invalid model type: {model_type}")
+
     prompt = input("prompt: ")
-    response = client.create(prompt)
-    print(f"response: {response.content}")
+    try:
+        response = client.create(prompt)
+        print(f"response: {response.content}")
+    except RuntimeError as e:
+        print(f"error: {e}")
 
 
 if __name__ == "__main__":

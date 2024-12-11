@@ -47,7 +47,7 @@ class LLMClient(abc.ABC):
         self.api_key = api_key
 
         self.logger = logging.getLogger(f"{self.__class__.__name__}")
-        self.logger.setLevel(os.getenv("LOG_LEVEL", default=logging.INFO))
+        self.logger.setLevel(os.getenv("LOG_LEVEL", default="INFO"))
 
         handler = logging.StreamHandler()
         formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -55,12 +55,12 @@ class LLMClient(abc.ABC):
         self.logger.addHandler(handler)
 
     @abc.abstractmethod
-    def create(self, request: LLMRequest) -> LLMResponse:
+    def create(self, prompt: str) -> LLMResponse:
         """
         Abstract method for generate the response
 
         Args:
-            request: LLM request
+            prompt: text to be inserted by the user
 
         Returns:
             standard response from LLM
@@ -68,4 +68,3 @@ class LLMClient(abc.ABC):
         Raises:
             RuntimeError: For errors during generation
         """
-        pass
