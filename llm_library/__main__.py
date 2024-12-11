@@ -1,4 +1,5 @@
 import argparse
+import sys
 import enum
 from dotenv import load_dotenv
 from .OpenAIMockClient import OpenAIMockClient
@@ -12,22 +13,44 @@ class LLM(enum.Enum):
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
 
+OPENAI_MODELS = ["gpt-3.5-turbo", "gpt-4"]
+ANTHROPIC_MODELS = ["claude-3-sonnet", "claude-2"]
+
 
 def main(model_type: LLM):
     client: LLMClient = None
     if model_type == LLM.OPENAI:
-        client = OpenAIMockClient()
+        print("OpenAI models:")
+        model = _select_model(OPENAI_MODELS)
+        client = OpenAIMockClient(model)
     if model_type == LLM.ANTHROPIC:
-        client = AnthropicMockClient()
+        print("Anthropic models:")
+        model = _select_model(ANTHROPIC_MODELS)
+        client = AnthropicMockClient(model)
     if client is None:
-        raise ValueError(f"Invalid model type: {model_type}")
+        print("Error invalid model type")
+        sys.exit(1)
 
     prompt = input("prompt: ")
     try:
         response = client.create(prompt)
         print(f"response: {response.content}")
     except RuntimeError as e:
-        print(f"error: {e}")
+        print(f"Error: {e}")
+        sys.exit(1)
+
+
+def _select_model(models: list[str]):
+    for i, model in enumerate(models):
+        print(f"{i + 1}. {model}")
+    try:
+        selected = int(input("model: ")) - 1
+        if selected < 0:
+            raise ValueError()
+        return models[selected]
+    except ValueError:
+        print("Error not a valid number")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

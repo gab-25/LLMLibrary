@@ -6,7 +6,7 @@ from .LLMClient import LLMClient, LLMRequest, LLMResponse
 class OpenAIMockClient(LLMClient):
     """Mock client for simulating interactions with OpenAI"""
 
-    def __init__(self, model="gpt-3.5-turbo"):
+    def __init__(self, model):
         api_key = os.getenv("OPENAI_API_KEY")
         super().__init__(model, api_key)
 
